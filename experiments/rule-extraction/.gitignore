@@ -1,0 +1,6 @@
+node_modules/
+coverage/
+# Change sets, extractions and labels contain source excerpts from the mined repo.
+data/
+.env
+.env.example

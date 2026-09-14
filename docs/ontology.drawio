@@ -1,0 +1,343 @@
+<mxfile host="Electron" agent="Claude Code" pages="2">
+  <diagram id="schema" name="1 · Ontology schema">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1800" pageHeight="1250" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <!-- Title -->
+        <mxCell id="title" value="&lt;b&gt;Hippokampus — Business Rule Ontology&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:12px&quot; color=&quot;#666666&quot;&gt;Rules are mined from approved diffs. Every RuleVersion is backed by Evidence and tied to the ChangeSet that introduced, modified or retired it.&lt;/font&gt;" style="text;html=1;align=left;verticalAlign=middle;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="40" y="10" width="1200" height="60" as="geometry" />
+        </mxCell>
+        <!-- Zones -->
+        <mxCell id="zBiz" value="BUSINESS MEANING — what the domain is" style="rounded=1;arcSize=2;whiteSpace=wrap;html=1;fillColor=#eef4fb;strokeColor=#6c8ebf;dashed=1;verticalAlign=top;align=left;spacingLeft=12;spacingTop=6;fontStyle=1;fontSize=12;fontColor=#3c5a86;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="480" height="760" as="geometry" />
+        </mxCell>
+        <mxCell id="zRule" value="RULE CORE — what must be true" style="rounded=1;arcSize=2;whiteSpace=wrap;html=1;fillColor=#fff8e1;strokeColor=#d6b656;dashed=1;verticalAlign=top;align=left;spacingLeft=12;spacingTop=6;fontStyle=1;fontSize=12;fontColor=#8a6d1f;" vertex="1" parent="1">
+          <mxGeometry x="560" y="80" width="540" height="760" as="geometry" />
+        </mxCell>
+        <mxCell id="zProv" value="PROVENANCE — why, who, when" style="rounded=1;arcSize=2;whiteSpace=wrap;html=1;fillColor=#eef7ec;strokeColor=#82b366;dashed=1;verticalAlign=top;align=left;spacingLeft=12;spacingTop=6;fontStyle=1;fontSize=12;fontColor=#4a7a36;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="80" width="560" height="760" as="geometry" />
+        </mxCell>
+        <mxCell id="zCode" value="CODE — where it is enforced" style="rounded=1;arcSize=3;whiteSpace=wrap;html=1;fillColor=#f5eff8;strokeColor=#9673a6;dashed=1;verticalAlign=top;align=left;spacingLeft=12;spacingTop=6;fontStyle=1;fontSize=12;fontColor=#6b4a80;" vertex="1" parent="1">
+          <mxGeometry x="40" y="880" width="1660" height="220" as="geometry" />
+        </mxCell>
+        <!-- Business meaning -->
+        <mxCell id="ctx" value="&lt;b&gt;BoundedContext&lt;/b&gt;&lt;hr&gt;name  &lt;i&gt;(Finance, Checkout…)&lt;/i&gt;&lt;br&gt;owner_team&lt;br&gt;description" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=4;fillColor=#ffffff;strokeColor=#6c8ebf;strokeWidth=1.5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="100" y="130" width="360" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="ent" value="&lt;b&gt;DomainEntity&lt;/b&gt;&lt;hr&gt;name  &lt;i&gt;(Order, Refund, Customer…)&lt;/i&gt;&lt;br&gt;definition&lt;br&gt;aliases[]  &lt;i&gt;(cust, client, account_holder)&lt;/i&gt;&lt;br&gt;lifecycle_states[]" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=4;fillColor=#ffffff;strokeColor=#6c8ebf;strokeWidth=1.5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="100" y="330" width="360" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="attr" value="&lt;b&gt;Attribute&lt;/b&gt;&lt;hr&gt;name  &lt;i&gt;(requested_at, amount…)&lt;/i&gt;&lt;br&gt;data_type · unit&lt;br&gt;allowed_values" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=4;fillColor=#ffffff;strokeColor=#6c8ebf;strokeWidth=1.5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="100" y="560" width="360" height="110" as="geometry" />
+        </mxCell>
+        <!-- Rule core -->
+        <mxCell id="rtype" value="&lt;b&gt;«enum» RuleType&lt;/b&gt;&lt;hr&gt;Constraint · Derivation · Computation&lt;br&gt;Authorization · StateTransition · Temporal" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=4;fillColor=#ffffff;strokeColor=#d6b656;strokeWidth=1.5;fontSize=11;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="120" width="420" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="rule" value="&lt;b&gt;BusinessRule&lt;/b&gt;&lt;hr&gt;id  &lt;i&gt;(R-142)&lt;/i&gt;&lt;br&gt;statement  &lt;i&gt;(plain English)&lt;/i&gt;&lt;br&gt;condition → outcome  &lt;i&gt;(structured)&lt;/i&gt;&lt;br&gt;confidence  &lt;i&gt;(0–1)&lt;/i&gt;&lt;br&gt;status  &lt;i&gt;(candidate · confirmed · retired)&lt;/i&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=4;fillColor=#ffffff;strokeColor=#d6b656;strokeWidth=2.5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="620" y="300" width="420" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="ver" value="&lt;b&gt;RuleVersion&lt;/b&gt;&lt;hr&gt;version · prev_version&lt;br&gt;statement / condition / outcome snapshot&lt;br&gt;valid_from · valid_to  &lt;i&gt;(business time)&lt;/i&gt;&lt;br&gt;recorded_at  &lt;i&gt;(system time)&lt;/i&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=4;fillColor=#ffffff;strokeColor=#d6b656;strokeWidth=1.5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="620" y="560" width="420" height="160" as="geometry" />
+        </mxCell>
+        <!-- Provenance -->
+        <mxCell id="ticket" value="&lt;b&gt;Ticket&lt;/b&gt;&lt;hr&gt;key · summary&lt;br&gt;source  &lt;i&gt;(Jira, Linear)&lt;/i&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=4;fillColor=#ffffff;strokeColor=#82b366;strokeWidth=1.5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="120" width="200" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="person" value="&lt;b&gt;Person&lt;/b&gt;&lt;hr&gt;handle · role&lt;br&gt;team" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=4;fillColor=#ffffff;strokeColor=#82b366;strokeWidth=1.5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1460" y="120" width="210" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="cs" value="&lt;b&gt;ChangeSet&lt;/b&gt;&lt;br&gt;&lt;i&gt;approved diff / PR&lt;/i&gt;&lt;hr&gt;pr_id · title&lt;br&gt;description&lt;br&gt;base_sha..head_sha&lt;br&gt;merged_at" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=4;fillColor=#ffffff;strokeColor=#82b366;strokeWidth=2.5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="290" width="200" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="appr" value="&lt;b&gt;Approval&lt;/b&gt;&lt;hr&gt;approved_at&lt;br&gt;review_comments&lt;br&gt;weight  &lt;i&gt;(real review vs rubber stamp)&lt;/i&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=4;fillColor=#ffffff;strokeColor=#82b366;strokeWidth=1.5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1460" y="290" width="210" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="evid" value="&lt;b&gt;Evidence&lt;/b&gt;&lt;hr&gt;kind:&lt;br&gt;&amp;nbsp; diff_hunk · test_assertion&lt;br&gt;&amp;nbsp; db_constraint · config&lt;br&gt;&amp;nbsp; feature_flag · review_comment&lt;br&gt;snippet&lt;br&gt;extractor · confidence" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=4;fillColor=#ffffff;strokeColor=#82b366;strokeWidth=1.5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="540" width="200" height="190" as="geometry" />
+        </mxCell>
+        <!-- Code -->
+        <mxCell id="sym" value="&lt;b&gt;CodeSymbol&lt;/b&gt;&lt;hr&gt;fq_name  &lt;i&gt;(refunds.policy.REFUND_WINDOW_DAYS)&lt;/i&gt;&lt;br&gt;kind  &lt;i&gt;(function · class · const · column · flag)&lt;/i&gt;&lt;br&gt;path · language&lt;br&gt;content_hash  &lt;i&gt;(anchor survives code moves)&lt;/i&gt;" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=4;fillColor=#ffffff;strokeColor=#9673a6;strokeWidth=1.5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="620" y="930" width="420" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="repo" value="&lt;b&gt;Repository / Service&lt;/b&gt;&lt;hr&gt;name · url&lt;br&gt;runtime · owner_team" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=4;fillColor=#ffffff;strokeColor=#9673a6;strokeWidth=1.5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1340" y="930" width="330" height="140" as="geometry" />
+        </mxCell>
+        <!-- Edges -->
+        <mxCell id="e1" value="typed_as" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#fff8e1;strokeColor=#555555;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" edge="1" parent="1" source="rule" target="rtype">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="has_version 1..*" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#fff8e1;strokeColor=#555555;strokeWidth=2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="rule" target="ver">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="owned_by" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;exitX=0;exitY=0.2;entryX=1;entryY=0.5;" edge="1" parent="1" source="rule" target="ctx">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="applies_to 1..*" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;strokeWidth=2;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="rule" target="ent">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="constrains" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;exitX=0;exitY=0.85;entryX=1;entryY=0.5;" edge="1" parent="1" source="rule" target="attr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="belongs_to" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#eef4fb;strokeColor=#555555;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" edge="1" parent="1" source="ent" target="ctx">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" value="has" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=diamondThin;endFill=1;startArrow=none;fontSize=10;labelBackgroundColor=#eef4fb;strokeColor=#555555;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="ent" target="attr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" value="relates_to" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#eef4fb;strokeColor=#555555;exitX=0;exitY=0.2;entryX=0;entryY=0.65;horizontal=0;" edge="1" parent="1" source="ent" target="ent">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="75" y="356" />
+              <mxPoint x="75" y="414" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e9" value="realized_as" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;dashed=1;exitX=0;exitY=0.9;entryX=0;entryY=0.57;" edge="1" parent="1" source="ent" target="sym">
+          <mxGeometry x="0.6" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="58" y="447" />
+              <mxPoint x="58" y="1010" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e10" value="maps_to" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;dashed=1;exitX=0.5;exitY=1;entryX=0;entryY=0.2;" edge="1" parent="1" source="attr" target="sym">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" value="supersedes · conflicts_with&lt;br&gt;depends_on · duplicates" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#fff8e1;strokeColor=#b85450;fontColor=#b85450;exitX=1;exitY=0.2;entryX=1;entryY=0.8;" edge="1" parent="1" source="rule" target="rule">
+          <mxGeometry x="-0.1" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1075" y="334" />
+              <mxPoint x="1075" y="436" />
+            </Array>
+            <mxPoint x="-10" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e12" value="introduced_by&lt;br&gt;modified_by&lt;br&gt;retired_by" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;strokeWidth=2;exitX=1;exitY=0.25;entryX=0;entryY=0.8;" edge="1" parent="1" source="ver" target="cs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" value="supported_by 1..*" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;strokeWidth=2;exitX=1;exitY=0.75;entryX=0;entryY=0.6;" edge="1" parent="1" source="ver" target="evid">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" value="extracted_from" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#eef7ec;strokeColor=#555555;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" edge="1" parent="1" source="evid" target="cs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" value="anchored_to" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="evid" target="sym">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1280" y="860" />
+              <mxPoint x="830" y="860" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e16" value="lives_in" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#f5eff8;strokeColor=#555555;exitX=1;exitY=0.3;entryX=0;entryY=0.3;" edge="1" parent="1" source="sym" target="repo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" value="merged_into" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#eef7ec;strokeColor=#555555;exitX=1;exitY=0.9;entryX=0.65;entryY=0;" edge="1" parent="1" source="cs" target="repo">
+          <mxGeometry x="0.2" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1555" y="443" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e18" value="approved_via" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=9;labelBackgroundColor=#eef7ec;strokeColor=#555555;exitX=1;exitY=0.3;entryX=0;entryY=0.4;" edge="1" parent="1" source="cs" target="appr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" value="by" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#eef7ec;strokeColor=#555555;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" edge="1" parent="1" source="appr" target="person">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e20" value="authored_by" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#eef7ec;strokeColor=#555555;exitX=0.8;exitY=0;entryX=0.2;entryY=1;" edge="1" parent="1" source="cs" target="person">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1340" y="260" />
+              <mxPoint x="1502" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e21" value="implements" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#eef7ec;strokeColor=#555555;exitX=0.3;exitY=0;entryX=0.3;entryY=1;" edge="1" parent="1" source="cs" target="ticket">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Legend / invariants -->
+        <mxCell id="legend" value="&lt;b&gt;Invariants&lt;/b&gt;  ①  Every RuleVersion has ≥ 1 Evidence and exactly one introducing ChangeSet.   ②  A rule is only “confirmed” once its ChangeSet has a weighted Approval (or a human confirms it).   ③  Evidence anchors to CodeSymbols, not line numbers.   ④  Two timelines: valid_from/valid_to = when the business rule applied; recorded_at = when Hippokampus learned it.&lt;br&gt;&lt;b&gt;Edges&lt;/b&gt;  thick = backbone of the graph · dashed = semantic ↔ code mapping · red = rule-to-rule relations (used for conflict detection on new PRs)" style="text;html=1;align=left;verticalAlign=top;fontSize=11;whiteSpace=wrap;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1120" width="1660" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="example" name="2 · Example: refund window">
+    <mxGraphModel dx="1015" dy="795" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1900" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t2" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=18;" value="&lt;b&gt;Example instance — the refund window rule&lt;/b&gt;" vertex="1">
+          <mxGeometry height="40" width="900" x="80" as="geometry" />
+        </mxCell>
+        <mxCell id="finance" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="&lt;font color=&quot;#6c8ebf&quot; style=&quot;font-size:9px&quot;&gt;BoundedContext&lt;/font&gt;&lt;br&gt;&lt;b&gt;Finance&lt;/b&gt;" vertex="1">
+          <mxGeometry height="60" width="220" x="80" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="refund" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="&lt;font color=&quot;#6c8ebf&quot; style=&quot;font-size:9px&quot;&gt;DomainEntity&lt;/font&gt;&lt;br&gt;&lt;b&gt;Refund&lt;/b&gt;" vertex="1">
+          <mxGeometry height="60" width="220" x="380" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="order" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="&lt;font color=&quot;#6c8ebf&quot; style=&quot;font-size:9px&quot;&gt;DomainEntity&lt;/font&gt;&lt;br&gt;&lt;b&gt;Order&lt;/b&gt;" vertex="1">
+          <mxGeometry height="60" width="220" x="680" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="reqat" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="&lt;font color=&quot;#6c8ebf&quot; style=&quot;font-size:9px&quot;&gt;Attribute&lt;/font&gt;&lt;br&gt;&lt;b&gt;Refund.requested_at&lt;/b&gt;" vertex="1">
+          <mxGeometry height="60" width="220" x="680" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="r201" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" value="&lt;font color=&quot;#b7950b&quot; style=&quot;font-size:9px&quot;&gt;BusinessRule · Temporal · candidate · 0.81&lt;/font&gt;&lt;br&gt;&lt;b&gt;R-201&lt;/b&gt; Hide the refund button&lt;br&gt;14 days after delivery" vertex="1">
+          <mxGeometry height="110" width="300" x="80" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="r142" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2.5;fontSize=12;" value="&lt;font color=&quot;#b7950b&quot; style=&quot;font-size:9px&quot;&gt;BusinessRule · Temporal · confirmed · 0.93&lt;/font&gt;&lt;br&gt;&lt;b&gt;R-142&lt;/b&gt; A refund may only be requested&lt;br&gt;within 14 days of delivery" vertex="1">
+          <mxGeometry height="120" width="340" x="480" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="v1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;fontColor=#666666;fontSize=12;dashed=1;" value="&lt;font color=&quot;#b7950b&quot; style=&quot;font-size:9px&quot;&gt;RuleVersion&lt;/font&gt;&lt;br&gt;&lt;b&gt;v1 · 30 days&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;2024-06-11 → 2026-03-02&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="140" x="470" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="v2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" value="&lt;font color=&quot;#b7950b&quot; style=&quot;font-size:9px&quot;&gt;RuleVersion&lt;/font&gt;&lt;br&gt;&lt;b&gt;v2 · 14 days&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;2026-03-02 → now&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="130" x="690" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="ev1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="&lt;font color=&quot;#4a7a36&quot; style=&quot;font-size:9px&quot;&gt;Evidence · diff_hunk · from PR #881&lt;/font&gt;&lt;br&gt;&lt;font face=&quot;Courier New&quot;&gt;REFUND_WINDOW_DAYS = &lt;s&gt;30&lt;/s&gt; 14&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="280" x="900" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="ev2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="&lt;font color=&quot;#4a7a36&quot; style=&quot;font-size:9px&quot;&gt;Evidence · test_assertion · from PR #881&lt;/font&gt;&lt;br&gt;&lt;font face=&quot;Courier New&quot;&gt;assert request(day=15) is rejected&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="280" x="900" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="cs1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" value="&lt;font color=&quot;#6b4a80&quot; style=&quot;font-size:9px&quot;&gt;CodeSymbol · const&lt;/font&gt;&lt;br&gt;&lt;font face=&quot;Courier New&quot;&gt;refunds.policy.REFUND_WINDOW_DAYS&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="300" x="1260" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="cs2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" value="&lt;font color=&quot;#6b4a80&quot; style=&quot;font-size:9px&quot;&gt;CodeSymbol · test&lt;/font&gt;&lt;br&gt;&lt;font face=&quot;Courier New&quot;&gt;test_refund_rejected_after_14_days&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="300" x="1260" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="repoPay" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" value="&lt;font color=&quot;#6b4a80&quot; style=&quot;font-size:9px&quot;&gt;Repository&lt;/font&gt;&lt;br&gt;&lt;b&gt;payments-service&lt;/b&gt;" vertex="1">
+          <mxGeometry height="90" width="220" x="1640" y="395" as="geometry" />
+        </mxCell>
+        <mxCell id="pr312" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" value="&lt;font color=&quot;#4a7a36&quot; style=&quot;font-size:9px&quot;&gt;ChangeSet · merged 2024-06-11&lt;/font&gt;&lt;br&gt;&lt;b&gt;PR #312&lt;/b&gt;&lt;br&gt;“Add refund policy”" vertex="1">
+          <mxGeometry height="100" width="220" x="380" y="900" as="geometry" />
+        </mxCell>
+        <mxCell id="pr881" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2.5;fontSize=12;" value="&lt;font color=&quot;#4a7a36&quot; style=&quot;font-size:9px&quot;&gt;ChangeSet · merged 2026-03-02&lt;/font&gt;&lt;br&gt;&lt;b&gt;PR #881&lt;/b&gt;&lt;br&gt;“Shorten refund window to 14 days”" vertex="1">
+          <mxGeometry height="100" width="220" x="660" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="apr" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="&lt;font color=&quot;#4a7a36&quot; style=&quot;font-size:9px&quot;&gt;Approval · 2026-03-01 · weight high&lt;/font&gt;&lt;br&gt;“Confirmed with Finance, see FIN-204”" vertex="1">
+          <mxGeometry height="100" width="220" x="940" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="lead" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" value="&lt;font color=&quot;#4a7a36&quot; style=&quot;font-size:9px&quot;&gt;Person&lt;/font&gt;&lt;br&gt;&lt;b&gt;payments-lead&lt;/b&gt;" vertex="1">
+          <mxGeometry height="80" width="200" x="1220" y="670" as="geometry" />
+        </mxCell>
+        <mxCell id="fin204" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" value="&lt;font color=&quot;#4a7a36&quot; style=&quot;font-size:9px&quot;&gt;Ticket&lt;/font&gt;&lt;br&gt;&lt;b&gt;FIN-204&lt;/b&gt; Reduce refund abuse" vertex="1">
+          <mxGeometry height="80" width="220" x="660" y="820" as="geometry" />
+        </mxCell>
+        <mxCell id="ev3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="&lt;font color=&quot;#4a7a36&quot; style=&quot;font-size:9px&quot;&gt;Evidence · ui_guard&lt;/font&gt;&lt;br&gt;&lt;font face=&quot;Courier New&quot;&gt;if (daysSince(delivery) &amp;gt; 14) hide()&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="300" x="80" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="cs3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" value="&lt;font color=&quot;#6b4a80&quot; style=&quot;font-size:9px&quot;&gt;CodeSymbol · component&lt;/font&gt;&lt;br&gt;&lt;font face=&quot;Courier New&quot;&gt;RefundButton.tsx::RefundButton&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="300" x="80" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="repoWeb" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" value="&lt;font color=&quot;#6b4a80&quot; style=&quot;font-size:9px&quot;&gt;Repository&lt;/font&gt;&lt;br&gt;&lt;b&gt;checkout-web&lt;/b&gt;" vertex="1">
+          <mxGeometry height="70" width="300" x="80" y="790" as="geometry" />
+        </mxCell>
+        <mxCell id="x1" edge="1" parent="1" source="refund" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" target="finance" value="belongs_to">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="x2" edge="1" parent="1" source="refund" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="order" value="for">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="x3" edge="1" parent="1" source="refund" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=diamondThin;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;exitX=0.9;exitY=1;entryX=0;entryY=0.5;" target="reqat" value="has">
+          <mxGeometry relative="1" x="0.5" as="geometry" />
+        </mxCell>
+        <mxCell id="x4" edge="1" parent="1" source="r142" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;exitX=0.2;exitY=0;entryX=0.76;entryY=1;" target="refund" value="applies_to">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="x5" edge="1" parent="1" source="r142" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;exitX=0.8;exitY=0;entryX=0.33;entryY=1;" target="reqat" value="constrains">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="x6" edge="1" parent="1" source="r142" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;exitX=0;exitY=0.2;entryX=0.8;entryY=1;" target="finance" value="owned_by">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="440" y="324" />
+              <mxPoint x="440" y="200" />
+              <mxPoint x="256" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="x7" edge="1" parent="1" source="r201" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;exitX=0.5;exitY=0;entryX=0.68;entryY=1;" target="finance" value="owned_by">
+          <mxGeometry relative="1" x="-0.4" as="geometry" />
+        </mxCell>
+        <mxCell id="x8" edge="1" parent="1" source="r201" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#b85450;fontColor=#b85450;exitX=1;exitY=0.5;entryX=0;entryY=0.46;" target="r142" value="duplicates">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="x9" edge="1" parent="1" source="r142" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;strokeWidth=2;exitX=0.8;exitY=1;entryX=0.48;entryY=0;" target="v2" value="has_version">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="x10" edge="1" parent="1" source="v2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#b85450;fontColor=#b85450;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" target="v1" value="supersedes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="x11" edge="1" parent="1" source="v1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;exitX=0.25;exitY=1;entryX=0.568;entryY=0;" target="pr312" value="introduced_by">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="x12" edge="1" parent="1" source="v1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#999999;fontColor=#666666;dashed=1;exitX=0.8;exitY=1;entryX=0.1;entryY=0;" target="pr881" value="retired_by">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="582" y="625" />
+              <mxPoint x="682" y="625" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="x13" edge="1" parent="1" source="v2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;strokeWidth=2;exitX=0.5;exitY=1;entryX=0.432;entryY=0;" target="pr881" value="introduced_by">
+          <mxGeometry relative="1" x="0.2" as="geometry">
+            <mxPoint x="30" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="x14" edge="1" parent="1" source="v2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;exitX=1;exitY=0.1;entryX=0;entryY=0.5;" target="ev1" value="supported_by">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="850" y="491" />
+              <mxPoint x="850" y="385" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="x15" edge="1" parent="1" source="v2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;strokeColor=#555555;exitX=1;exitY=0.6;entryX=0;entryY=0.5;" target="ev2" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="870" y="546" />
+              <mxPoint x="870" y="495" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="x16" edge="1" parent="1" source="ev1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;" target="cs1" value="anchored_to">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="x17" edge="1" parent="1" source="ev2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;" target="cs2" value="anchored_to">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="x18" edge="1" parent="1" source="cs1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;exitX=1;exitY=0.5;entryX=0;entryY=0.25;" target="repoPay" value="lives_in">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="x19" edge="1" parent="1" source="cs2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;strokeColor=#555555;exitX=1;exitY=0.5;entryX=0;entryY=0.75;" target="repoPay" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="x20" edge="1" parent="1" source="pr881" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="apr" value="approved_via">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="x21" edge="1" parent="1" source="apr" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="lead" value="by">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="x22" edge="1" parent="1" source="pr881" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="fin204" value="implements">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="x23" edge="1" parent="1" source="r201" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="ev3" value="supported_by">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="x24" edge="1" parent="1" source="ev3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="cs3" value="anchored_to">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="x25" edge="1" parent="1" source="cs3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#555555;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="repoWeb" value="lives_in">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="q" parent="1" style="text;html=1;align=left;verticalAlign=top;fontSize=12;whiteSpace=wrap;fontColor=#333333;" value="&lt;b&gt;Question this graph answers:&lt;/b&gt; “Why can’t a customer get a refund on day 15? Since when, who signed off, and where is it enforced?”&lt;br&gt;→ R-142 v2 (14 days, since 2026-03-02) ← PR #881, approved by payments-lead for FIN-204 → enforced in payments-service, &lt;b&gt;and duplicated&lt;/b&gt; in checkout-web as R-201.&lt;br&gt;&lt;i&gt;A new PR that changes REFUND_WINDOW_DAYS in only one of those repos would be flagged: R-142 and R-201 would drift apart.&lt;/i&gt;" vertex="1">
+          <mxGeometry height="90" width="940" x="920" y="820" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
