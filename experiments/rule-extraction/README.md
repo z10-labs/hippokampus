@@ -37,6 +37,21 @@ gh auth status              # fetch uses your GitHub CLI login
 pnpm test
 ```
 
+## Context map (once per repo)
+
+Business rules are assigned to **bounded contexts**: business capabilities at the level of a microservice or high-level module. Each repo gets a context map before any extraction:
+
+```bash
+pnpm cli contexts-draft --repo owner/name   # ~$0.35 for a ~1k-file repo: tree + PR scopes + docs → draft map
+# review data/<owner>__<name>/context-map.json by hand
+pnpm cli contexts-check --repo owner/name   # free: validate and report coverage
+```
+
+- **Draft.** Collects every file path on the default branch, the scopes from merged PR titles (`feat(invoicing): …`) and the documents most likely to describe the domain (root README, agent notes, architecture docs). One model call proposes contexts, each with a description, aliases, the evidence behind it and **path patterns**. In layered codebases, patterns match feature names across layers: routes, UI, logic, schema. Cross-cutting technical code goes into `sharedPaths`, and judgement calls go into `openQuestions`.
+- **Review.** You are the approval step: rename, merge or split contexts, fix patterns, then set the map's `status` to `confirmed` (and each context's to `confirmed` or `deprecated`). Ids are the stable keys, so rename `name` freely but change `id` deliberately.
+- **Pattern syntax.** `*`, `**` and `?` are wildcards and `{a,b}` lists alternatives. Parentheses and square brackets match literally, so Next.js route folders like `(tutor)` and `[id]` are written as-is.
+- **Check.** Re-run after every edit. It reports coverage (files in a context or shared, as a share of relevant files), the largest unmapped directories, files claimed by more than one context, and patterns that match nothing (usually typos or stale paths). Run it again later to spot new, unmapped areas of the codebase.
+
 ## Grading guide
 
 | Verdict | Meaning |

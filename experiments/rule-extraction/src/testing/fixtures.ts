@@ -1,4 +1,6 @@
 import type { ChangeSet } from "../changeset/types";
+import type { RepoSignals } from "../contexts/signals";
+import type { BoundedContext, ContextMap } from "../contexts/types";
 import type { ExtractionRecord, Usage } from "../extraction/record";
 import type { ExtractedRule } from "../extraction/schema";
 import type { Label } from "../labeling/types";
@@ -83,6 +85,51 @@ export function makeRecord(
       excluded_technical_changes: overrides.excludedTechnicalChanges ?? [],
       rules,
     },
+  };
+}
+
+export function makeBoundedContext(
+  id: string,
+  pathPatterns: string[] = [`apps/web/src/**/${id}/**`],
+  overrides: Partial<BoundedContext> = {},
+): BoundedContext {
+  return {
+    id,
+    name: id.charAt(0).toUpperCase() + id.slice(1),
+    description: `The ${id} business capability.`,
+    status: "proposed",
+    pathPatterns,
+    aliases: [],
+    signals: [],
+    ...overrides,
+  };
+}
+
+export function makeContextMap(overrides: Partial<ContextMap> = {}): ContextMap {
+  return {
+    repo: "acme/tutoring",
+    ref: "main",
+    commitSha: "abc1234def",
+    generatedAt: "2026-09-15T08:00:00.000Z",
+    generatedBy: "claude-sonnet-5",
+    status: "draft",
+    contexts: [makeBoundedContext("invoicing"), makeBoundedContext("sessions")],
+    sharedPaths: [],
+    openQuestions: [],
+    ...overrides,
+  };
+}
+
+export function makeRepoSignals(overrides: Partial<RepoSignals> = {}): RepoSignals {
+  return {
+    repo: "acme/tutoring",
+    ref: "main",
+    commitSha: "abc1234def",
+    paths: ["apps/web/src/lib/invoices.ts", "apps/web/src/lib/sessions.ts", "README.md"],
+    treeTruncated: false,
+    prTitles: ["feat(invoicing): send invoices", "fix(invoicing): overdue flag", "feat(sessions): recurring"],
+    docs: [{ path: "README.md", content: "# Tutoring platform" }],
+    ...overrides,
   };
 }
 

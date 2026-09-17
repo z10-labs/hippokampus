@@ -28,3 +28,13 @@ export const DEFAULT_COMMIT_LIMIT = 300;
 export const DEFAULT_CONCURRENCY = 3;
 
 export const DATA_ROOT = "data";
+
+// Context map setup
+export const CONTEXT_PR_TITLE_LIMIT = 1_000;
+export const CONTEXT_DOC_LIMIT = 8;
+export const CONTEXT_DOC_MAX_CHARS = 15_000;
+/** Mapping a whole repo takes long thinking plus a large JSON map, so this call streams with a higher ceiling. */
+export const CONTEXT_MAP_MAX_OUTPUT_TOKENS = 64_000;
+/** Full file listings above this size fall back to a directory summary. */
+export const CONTEXT_TREE_MAX_CHARS = 200_000;
+export const UNMAPPED_DIRECTORY_DEPTH = 5;

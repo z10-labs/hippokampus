@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import Anthropic from "@anthropic-ai/sdk";
 import { ChangeSetSchema } from "../changeset/types";
+import { assertCredentials } from "../claude/credentials";
 import { EXTRACTION_VARIANT } from "../config";
 import { estimateUsd } from "../scoring/cost";
 import { jsonFile, readAllJson, repoPaths, writeJson } from "../store/store";
@@ -52,12 +53,6 @@ export async function runExtraction(options: ExtractionRunOptions): Promise<numb
   console.log(`Done: ${records.length} extracted, ${failures.length} failed, ~$${runUsd.toFixed(2)} this run.`);
   failures.forEach((failure) => console.error(`  ✗ ${failure}`));
   return failures.length === 0 ? 0 : 1;
-}
-
-function assertCredentials(): void {
-  if (!process.env.ANTHROPIC_API_KEY && !process.env.ANTHROPIC_AUTH_TOKEN) {
-    throw new Error("No Anthropic credentials found. Copy .env.example to .env and set ANTHROPIC_API_KEY.");
-  }
 }
 
 function describeError(error: unknown): string {

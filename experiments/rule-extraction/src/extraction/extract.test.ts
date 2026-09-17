@@ -1,7 +1,8 @@
 import { describe, expect, test, vi } from "vitest";
 import { MODEL, PROMPT_VERSION } from "../config";
 import { makeChangeSet, makeRule } from "../testing/fixtures";
-import { ExtractionError, extractChangeSet, type MessagesClient, normaliseExtraction } from "./extract";
+import { type MessagesClient, ModelResponseError } from "../claude/response";
+import { extractChangeSet, normaliseExtraction } from "./extract";
 
 const PARSED = {
   changes_business_rules: true,
@@ -46,12 +47,12 @@ describe("extractChangeSet", () => {
     [{ stop_reason: "refusal", stop_details: null }, /declined \(no category\)/],
     [{ stop_reason: "max_tokens" }, /max_tokens/],
     [{ parsed_output: null }, /did not match/],
-  ])("throws an ExtractionError for %o", async (overrides, message) => {
+  ])("throws a ModelResponseError for %o", async (overrides, message) => {
     const { client } = fakeClient(overrides);
 
     const attempt = extractChangeSet(client, makeChangeSet());
 
-    await expect(attempt).rejects.toBeInstanceOf(ExtractionError);
+    await expect(attempt).rejects.toBeInstanceOf(ModelResponseError);
     await expect(attempt).rejects.toThrow(message);
   });
 });

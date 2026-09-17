@@ -19,6 +19,7 @@ export function repoPaths(repo: string, variant: string) {
   return {
     root,
     changeSets: path.join(root, "changesets"),
+    contextMap: path.join(root, "context-map.json"),
     extractions: path.join(root, "extractions", variant),
     labels: path.join(root, "labels", variant),
     reports: path.join(root, "reports"),

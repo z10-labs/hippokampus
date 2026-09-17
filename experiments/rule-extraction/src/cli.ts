@@ -2,6 +2,7 @@ import { existsSync } from "node:fs";
 import { parseArgs } from "node:util";
 import { parseIdList, parsePositiveInt } from "./cli/args";
 import { DEFAULT_COMMIT_LIMIT, DEFAULT_CONCURRENCY, DEFAULT_PR_LIMIT, MODEL } from "./config";
+import { runContextCheck, runContextDraft } from "./contexts/runContexts";
 import { approxPromptTokens } from "./extraction/prompt";
 import { runExtraction } from "./extraction/runExtraction";
 import { fetchChangeSets } from "./github/fetchChangeSets";
@@ -13,6 +14,9 @@ import { assertRepo, repoPaths } from "./store/store";
 const USAGE = `Usage: pnpm cli <command> --repo owner/name [options]
 
 Commands
+  contexts-draft   Draft the repo's bounded-context map from its tree, PR scopes and docs (~$0.35)
+              --force              replace an existing map (discards your edits)
+  contexts-check   Validate the edited map and report coverage against the current tree (no API cost)
   fetch     Save merged PRs and direct commits as change sets (no API cost)
               --pr-limit <n>       default ${DEFAULT_PR_LIMIT}
               --commit-limit <n>   default ${DEFAULT_COMMIT_LIMIT}
@@ -55,6 +59,10 @@ async function main(argv: string[]): Promise<number> {
   const repo = assertRepo(values.repo);
 
   switch (command) {
+    case "contexts-draft":
+      return runContextDraft({ repo, force: values.force });
+    case "contexts-check":
+      return runContextCheck({ repo });
     case "fetch":
       return runFetch(repo, {
         prLimit: parsePositiveInt(values["pr-limit"], "pr-limit", DEFAULT_PR_LIMIT),

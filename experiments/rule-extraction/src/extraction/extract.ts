@@ -1,16 +1,10 @@
-import type Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import type { ChangeSet } from "../changeset/types";
+import { ensureParsed, type MessagesClient, toUsage } from "../claude/response";
 import { EXTRACTION_EFFORT, MAX_OUTPUT_TOKENS, MODEL, PROMPT_VERSION } from "../config";
 import { buildChangeSetPrompt, SYSTEM_PROMPT } from "./prompt";
 import type { ExtractionRecord } from "./record";
 import { type Extraction, ExtractionSchema } from "./schema";
-
-export class ExtractionError extends Error {
-  override name = "ExtractionError";
-}
-
-export type MessagesClient = Pick<Anthropic, "messages">;
 
 export async function extractChangeSet(client: MessagesClient, changeSet: ChangeSet): Promise<ExtractionRecord> {
   const response = await client.messages.parse({
@@ -22,16 +16,7 @@ export async function extractChangeSet(client: MessagesClient, changeSet: Change
     messages: [{ role: "user", content: buildChangeSetPrompt(changeSet) }],
   });
 
-  if (response.stop_reason === "refusal") {
-    const category = response.stop_details?.category ?? "no category";
-    throw new ExtractionError(`${changeSet.id}: the model declined (${category})`);
-  }
-  if (response.stop_reason === "max_tokens") {
-    throw new ExtractionError(`${changeSet.id}: output hit max_tokens (${MAX_OUTPUT_TOKENS}); raise MAX_OUTPUT_TOKENS`);
-  }
-  if (!response.parsed_output) {
-    throw new ExtractionError(`${changeSet.id}: response did not match the extraction schema`);
-  }
+  const extraction = ensureParsed(changeSet.id, response, response.stop_details?.category, MAX_OUTPUT_TOKENS);
 
   return {
     changeSetId: changeSet.id,
@@ -39,13 +24,8 @@ export async function extractChangeSet(client: MessagesClient, changeSet: Change
     promptVersion: PROMPT_VERSION,
     extractedAt: new Date().toISOString(),
     stopReason: response.stop_reason ?? "unknown",
-    usage: {
-      inputTokens: response.usage.input_tokens,
-      outputTokens: response.usage.output_tokens,
-      cacheCreationInputTokens: response.usage.cache_creation_input_tokens ?? 0,
-      cacheReadInputTokens: response.usage.cache_read_input_tokens ?? 0,
-    },
-    extraction: normaliseExtraction(response.parsed_output),
+    usage: toUsage(response.usage),
+    extraction: normaliseExtraction(extraction),
   };
 }
 
