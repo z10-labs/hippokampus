@@ -24,6 +24,10 @@ export const ExtractionRecordSchema = z.object({
   extractedAt: z.string(),
   stopReason: z.string(),
   usage: UsageSchema,
+  contextMapCommitSha: z.string().nullable().default(null),
+  contextMapGeneratedAt: z.string().nullable().default(null),
+  contextMapHash: z.string().nullable().default(null),
+  matchedContextIds: z.array(z.string()).default([]),
   extraction: StoredExtractionSchema,
 });
 

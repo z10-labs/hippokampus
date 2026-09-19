@@ -1,4 +1,5 @@
 import type { ChangeSet } from "../changeset/types";
+import type { BoundedContext } from "../contexts/types";
 import { APPROX_CHARS_PER_TOKEN } from "../config";
 
 // Examples deliberately come from a different domain (retail orders) so the prompt
@@ -24,6 +25,7 @@ Contrast, from an unrelated retail domain:
 
 For each rule:
 - business_owner names the role that owns the policy. If you can't name one convincingly, it isn't a business rule.
+- bounded_context must be the exact id of the confirmed context that owns the decision or outcome. Changed files and referenced entities are evidence, not ownership: a webhook may supply a payment fact while Invoicing owns the invoice-status policy. Use null only when none of the confirmed contexts owns the rule, and never invent an id.
 - change_kind is introduced for new behaviour, modified when existing behaviour changed, retired when behaviour was removed. Removed lines in the diff show what used to be true.
 - State the rule as it stands after this change; for a retired rule, state the rule that no longer applies. Don't describe earlier versions: linking a rule to its history happens in a later step.
 - Evidence quotes text that appears in the input: prefer changed lines, test assertions and schema constraints, and name the enclosing symbol when you can tell.
@@ -33,8 +35,15 @@ For each rule:
 If the change alters no business rules, set changes_business_rules to false and return an empty rules list. A technical constraint recorded as a business rule is worse than leaving it out.`;
 
 const listOrNone = (items: readonly string[]): string => (items.length === 0 ? "none" : items.join("\n"));
+const escapeXml = (value: string): string =>
+  value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 
-export function buildChangeSetPrompt(changeSet: ChangeSet): string {
+export interface RuleContextMap {
+  contexts: ReadonlyArray<Pick<BoundedContext, "id" | "name" | "description" | "aliases">>;
+  matchedContextIds: readonly string[];
+}
+
+export function buildChangeSetPrompt(changeSet: ChangeSet, contextMap?: RuleContextMap): string {
   const reviews = changeSet.reviews.map(
     (review) => `- ${review.reviewer}: ${review.state}${review.body ? ` — ${review.body}` : ""}`,
   );
@@ -43,8 +52,29 @@ export function buildChangeSetPrompt(changeSet: ChangeSet): string {
   );
   const omitted = changeSet.droppedFiles.map((file) => `- ${file.path} (${file.reason})`);
   const files = changeSet.files.map((file) => `<file path="${file.path}">\n${file.patch}\n</file>`);
+  const contexts =
+    contextMap?.contexts.map(
+      (context) =>
+        `<context id="${context.id}" matched_by_changed_paths="${contextMap.matchedContextIds.includes(context.id)}">\n` +
+        `<name>${escapeXml(context.name)}</name>\n` +
+        `<description>${escapeXml(context.description)}</description>\n` +
+        `<aliases>${context.aliases.length === 0 ? "none" : context.aliases.map(escapeXml).join(", ")}</aliases>\n` +
+        "</context>",
+    ) ?? [];
+  const contextSection =
+    contextMap === undefined
+      ? []
+      : [
+          "<confirmed_context_map>",
+          contexts.length === 0 ? "none" : contexts.join("\n"),
+          `<candidate_context_ids>${contextMap.matchedContextIds.join(", ") || "none"}</candidate_context_ids>`,
+          "</confirmed_context_map>",
+          "Choose rule ownership from the confirmed ids above. Path-matched candidates are a starting point, not an ownership decision.",
+          "",
+        ];
 
   return [
+    ...contextSection,
     `<change_set id="${changeSet.id}" kind="${changeSet.kind}">`,
     `<title>${changeSet.title}</title>`,
     `<author>${changeSet.author}</author>`,
@@ -61,6 +91,6 @@ export function buildChangeSetPrompt(changeSet: ChangeSet): string {
 }
 
 /** Rough token estimate for planning spend before any API call; not billing-accurate. */
-export function approxPromptTokens(changeSet: ChangeSet): number {
-  return Math.ceil((SYSTEM_PROMPT.length + buildChangeSetPrompt(changeSet).length) / APPROX_CHARS_PER_TOKEN);
+export function approxPromptTokens(changeSet: ChangeSet, contextMap?: RuleContextMap): number {
+  return Math.ceil((SYSTEM_PROMPT.length + buildChangeSetPrompt(changeSet, contextMap).length) / APPROX_CHARS_PER_TOKEN);
 }

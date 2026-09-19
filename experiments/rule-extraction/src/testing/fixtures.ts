@@ -79,6 +79,10 @@ export function makeRecord(
     extractedAt: overrides.extractedAt ?? "2026-09-14T10:00:00.000Z",
     stopReason: "end_turn",
     usage: overrides.usage ?? DEFAULT_USAGE,
+    contextMapCommitSha: null,
+    contextMapGeneratedAt: null,
+    contextMapHash: null,
+    matchedContextIds: [],
     extraction: {
       changes_business_rules: overrides.changesBusinessRules ?? rules.length > 0,
       classification_reason: "Changes invoice terms.",

@@ -1,14 +1,28 @@
 import { describe, expect, test, vi } from "vitest";
 import { MODEL, PROMPT_VERSION } from "../config";
-import { makeChangeSet, makeRule } from "../testing/fixtures";
+import { makeBoundedContext, makeChangeSet, makeContextMap, makeRule } from "../testing/fixtures";
 import { type MessagesClient, ModelResponseError } from "../claude/response";
-import { extractChangeSet, normaliseExtraction } from "./extract";
+import { contextMapFingerprint, extractChangeSet, normaliseExtraction } from "./extract";
+
+const MAP = makeContextMap({
+  status: "confirmed",
+  contexts: [
+    makeBoundedContext("invoicing", ["src/main/java/**"], {
+      status: "confirmed",
+      description: "Owns invoice terms and lifecycle decisions.",
+    }),
+    makeBoundedContext("payments", ["src/main/java/Payment*.java"], {
+      status: "confirmed",
+      description: "Owns payment-attempt outcomes.",
+    }),
+  ],
+});
 
 const PARSED = {
   changes_business_rules: true,
   classification_reason: "Changes terms.",
   excluded_technical_changes: ["Rejects malformed invoice ids"],
-  rules: [makeRule()],
+  rules: [makeRule({ bounded_context: "invoicing" })],
 };
 
 function fakeClient(overrides: Record<string, unknown> = {}) {
@@ -26,18 +40,24 @@ describe("extractChangeSet", () => {
   test("sends the change set to the configured model and records usage", async () => {
     const { client, parse } = fakeClient();
 
-    const record = await extractChangeSet(client, makeChangeSet());
+    const record = await extractChangeSet(client, makeChangeSet(), MAP);
 
     const request = parse.mock.calls[0]?.[0];
     expect(request.model).toBe(MODEL);
     expect(request.thinking).toEqual({ type: "adaptive" });
     expect(request.messages[0].content).toContain("Shorten invoice due period");
+    expect(request.messages[0].content).toContain('<context id="invoicing" matched_by_changed_paths="true">');
+    expect(request.messages[0].content).toContain("<candidate_context_ids>invoicing</candidate_context_ids>");
     expect(record).toMatchObject({
       changeSetId: "pr-1",
       model: MODEL,
       promptVersion: PROMPT_VERSION,
       stopReason: "end_turn",
       usage: { inputTokens: 1200, outputTokens: 300, cacheCreationInputTokens: 0, cacheReadInputTokens: 50 },
+      contextMapCommitSha: MAP.commitSha,
+      contextMapGeneratedAt: MAP.generatedAt,
+      contextMapHash: contextMapFingerprint(MAP),
+      matchedContextIds: ["invoicing"],
       extraction: PARSED,
     });
   });
@@ -50,7 +70,7 @@ describe("extractChangeSet", () => {
   ])("throws a ModelResponseError for %o", async (overrides, message) => {
     const { client } = fakeClient(overrides);
 
-    const attempt = extractChangeSet(client, makeChangeSet());
+    const attempt = extractChangeSet(client, makeChangeSet(), MAP);
 
     await expect(attempt).rejects.toBeInstanceOf(ModelResponseError);
     await expect(attempt).rejects.toThrow(message);

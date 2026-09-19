@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { makeChangeSet } from "../testing/fixtures";
+import { makeBoundedContext, makeChangeSet } from "../testing/fixtures";
 import { approxPromptTokens, buildChangeSetPrompt, SYSTEM_PROMPT } from "./prompt";
 
 describe("buildChangeSetPrompt", () => {
@@ -34,6 +34,31 @@ describe("buildChangeSetPrompt", () => {
     expect(prompt).toContain("- qa on Invoice.java: Edge case?");
     expect(prompt).toContain("- pnpm-lock.yaml (lockfile)");
   });
+
+  test("includes every confirmed context and highlights path candidates", () => {
+    const prompt = buildChangeSetPrompt(makeChangeSet(), {
+      contexts: [
+        makeBoundedContext("invoicing", [], {
+          status: "confirmed",
+          name: "Billing & Invoicing",
+          description: "Owns invoice terms < 30 days & lifecycle decisions.",
+          aliases: ["billing & collections"],
+        }),
+        makeBoundedContext("payments", [], {
+          status: "confirmed",
+          description: "Owns payment-attempt outcomes.",
+        }),
+      ],
+      matchedContextIds: ["invoicing"],
+    });
+
+    expect(prompt).toContain('<context id="invoicing" matched_by_changed_paths="true">');
+    expect(prompt).toContain("<name>Billing &amp; Invoicing</name>");
+    expect(prompt).toContain("<description>Owns invoice terms &lt; 30 days &amp; lifecycle decisions.</description>");
+    expect(prompt).toContain("<aliases>billing &amp; collections</aliases>");
+    expect(prompt).toContain('<context id="payments" matched_by_changed_paths="false">');
+    expect(prompt).toContain("<candidate_context_ids>invoicing</candidate_context_ids>");
+  });
 });
 
 describe("approxPromptTokens", () => {
@@ -43,5 +68,20 @@ describe("approxPromptTokens", () => {
 
     expect(small).toBeGreaterThan(SYSTEM_PROMPT.length / 4);
     expect(large - small).toBeGreaterThan(9_000);
+  });
+
+  test("includes confirmed context cards when supplied", () => {
+    const changeSet = makeChangeSet();
+    const withoutMap = approxPromptTokens(changeSet);
+    const withMap = approxPromptTokens(changeSet, {
+      contexts: [
+        makeBoundedContext("invoicing", [], {
+          description: "Owns invoice lifecycle and commercial terms. ".repeat(20),
+        }),
+      ],
+      matchedContextIds: ["invoicing"],
+    });
+
+    expect(withMap).toBeGreaterThan(withoutMap);
   });
 });

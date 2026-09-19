@@ -11,13 +11,24 @@ describe("ExtractionRecordSchema", () => {
 
   test("still loads v1 records written before owners and exclusions existed", () => {
     const { business_owner: _owner, ...v1Rule } = makeRule();
-    const { promptVersion: _version, ...current } = makeRecord();
+    const {
+      promptVersion: _version,
+      contextMapCommitSha: _mapCommit,
+      contextMapGeneratedAt: _mapGeneratedAt,
+      contextMapHash: _mapHash,
+      matchedContextIds: _matchedContexts,
+      ...current
+    } = makeRecord();
     const { excluded_technical_changes: _excluded, ...v1Extraction } = current.extraction;
     const v1Record = { ...current, extraction: { ...v1Extraction, rules: [v1Rule] } };
 
     const parsed = ExtractionRecordSchema.parse(v1Record);
 
     expect(parsed.promptVersion).toBe("v1");
+    expect(parsed.contextMapCommitSha).toBeNull();
+    expect(parsed.contextMapGeneratedAt).toBeNull();
+    expect(parsed.contextMapHash).toBeNull();
+    expect(parsed.matchedContextIds).toEqual([]);
     expect(parsed.extraction.excluded_technical_changes).toEqual([]);
     expect(parsed.extraction.rules[0]?.business_owner).toBe("unspecified");
   });

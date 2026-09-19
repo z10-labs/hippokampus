@@ -1,15 +1,17 @@
 import { existsSync } from "node:fs";
 import { parseArgs } from "node:util";
 import { parseIdList, parsePositiveInt } from "./cli/args";
-import { DEFAULT_COMMIT_LIMIT, DEFAULT_CONCURRENCY, DEFAULT_PR_LIMIT, MODEL } from "./config";
+import { DEFAULT_COMMIT_LIMIT, DEFAULT_CONCURRENCY, DEFAULT_PR_LIMIT, EXTRACTION_VARIANT, MODEL } from "./config";
+import { contextsForPaths } from "./contexts/coverage";
 import { runContextCheck, runContextDraft } from "./contexts/runContexts";
+import { ContextMapSchema } from "./contexts/types";
 import { approxPromptTokens } from "./extraction/prompt";
 import { runExtraction } from "./extraction/runExtraction";
 import { fetchChangeSets } from "./github/fetchChangeSets";
 import { runLabeling } from "./labeling/runLabeling";
 import { roughExtractionUsd } from "./scoring/cost";
 import { runScoring } from "./scoring/runScoring";
-import { assertRepo, repoPaths } from "./store/store";
+import { assertRepo, readJson, repoPaths } from "./store/store";
 
 const USAGE = `Usage: pnpm cli <command> --repo owner/name [options]
 
@@ -21,7 +23,7 @@ Commands
               --pr-limit <n>       default ${DEFAULT_PR_LIMIT}
               --commit-limit <n>   default ${DEFAULT_COMMIT_LIMIT}
               --no-direct-commits
-  extract   Run ${MODEL} over each change set; skips ones already extracted
+  extract   Run ${MODEL} with the confirmed context map; skips change sets already extracted
               --only <id,id>       e.g. pr-3,commit-1cc9624
               --force              re-extract even if a result exists
               --concurrency <n>    default ${DEFAULT_CONCURRENCY}
@@ -96,7 +98,26 @@ async function runFetch(
 
   const { changeSets, failures } = await fetchChangeSets({ repo, outDir, ...options });
 
-  const tokens = changeSets.map(approxPromptTokens);
+  const contextMapPath = repoPaths(repo, EXTRACTION_VARIANT).contextMap;
+  const contextMap = existsSync(contextMapPath) ? await readJson(contextMapPath, ContextMapSchema) : null;
+  const confirmedContexts =
+    contextMap?.status === "confirmed"
+      ? contextMap.contexts.filter((context) => context.status === "confirmed")
+      : [];
+  const tokens = changeSets.map((changeSet) =>
+    approxPromptTokens(
+      changeSet,
+      confirmedContexts.length === 0
+        ? undefined
+        : {
+            contexts: confirmedContexts,
+            matchedContextIds: contextsForPaths(
+              changeSet.files.map((file) => file.path),
+              contextMap!,
+            ).filter((id) => confirmedContexts.some((context) => context.id === id)),
+          },
+    ),
+  );
   changeSets.forEach((changeSet, index) => {
     console.log(
       `  ${changeSet.id.padEnd(16)} ${String(changeSet.files.length).padStart(3)} files · ${String(changeSet.droppedFiles.length).padStart(2)} omitted · ~${tokens[index]?.toLocaleString("en-US")} tokens · ${changeSet.title.slice(0, 50)}`,

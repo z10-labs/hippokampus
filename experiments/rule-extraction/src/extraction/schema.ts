@@ -55,6 +55,21 @@ export const ExtractionSchema = z.object({
   rules: z.array(ExtractedRuleSchema),
 });
 
+/** Constrain new extractions to ids from the confirmed repository context map. */
+export function extractionSchemaForContextIds(contextIds: readonly string[]) {
+  const boundedContext =
+    contextIds.length === 0
+      ? z.null()
+      : z
+          .enum([contextIds[0]!, ...contextIds.slice(1)])
+          .nullable()
+          .describe("Exact id from the confirmed context map, or null only when none owns the rule");
+
+  return ExtractionSchema.extend({
+    rules: z.array(ExtractedRuleSchema.extend({ bounded_context: boundedContext })),
+  });
+}
+
 export type RuleType = (typeof RULE_TYPES)[number];
 export type ExtractedRule = z.infer<typeof ExtractedRuleSchema>;
 export type Extraction = z.infer<typeof ExtractionSchema>;

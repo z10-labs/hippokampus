@@ -4,7 +4,7 @@ export const MODEL = "claude-sonnet-5";
  * Bump whenever SYSTEM_PROMPT or the extraction schema changes. Extractions and labels
  * are stored per model and prompt version so iterations can be scored side by side.
  */
-export const PROMPT_VERSION = "v3";
+export const PROMPT_VERSION = "v4";
 export const EXTRACTION_VARIANT = `${MODEL}/${PROMPT_VERSION}`;
 
 /** Claude Sonnet 5 list prices, USD per million tokens (cache write 1.25×, cache read 0.1× input). */

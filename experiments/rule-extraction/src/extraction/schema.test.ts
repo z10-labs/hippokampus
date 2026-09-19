@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { makeRule } from "../testing/fixtures";
-import { ExtractionSchema } from "./schema";
+import { ExtractionSchema, extractionSchemaForContextIds } from "./schema";
 
 const validExtraction = () => ({
   changes_business_rules: true,
@@ -26,5 +26,22 @@ describe("ExtractionSchema", () => {
     const { business_owner: _omitted, ...ruleWithoutOwner } = makeRule();
 
     expect(ExtractionSchema.safeParse({ ...validExtraction(), rules: [ruleWithoutOwner] }).success).toBe(false);
+  });
+});
+
+describe("extractionSchemaForContextIds", () => {
+  test("accepts only confirmed context ids or null", () => {
+    const schema = extractionSchemaForContextIds(["invoicing", "payments"]);
+
+    expect(schema.safeParse({ ...validExtraction(), rules: [makeRule({ bounded_context: "invoicing" })] }).success).toBe(true);
+    expect(schema.safeParse({ ...validExtraction(), rules: [makeRule({ bounded_context: null })] }).success).toBe(true);
+    expect(schema.safeParse({ ...validExtraction(), rules: [makeRule({ bounded_context: "invented" })] }).success).toBe(false);
+  });
+
+  test("requires null when no confirmed contexts exist", () => {
+    const schema = extractionSchemaForContextIds([]);
+
+    expect(schema.safeParse({ ...validExtraction(), rules: [makeRule({ bounded_context: null })] }).success).toBe(true);
+    expect(schema.safeParse({ ...validExtraction(), rules: [makeRule({ bounded_context: "invoicing" })] }).success).toBe(false);
   });
 });
